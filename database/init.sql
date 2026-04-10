@@ -30,26 +30,94 @@ CREATE SCHEMA co2_project;
 SET default_table_access_method = heap;
 
 
-CREATE TABLE co2_project.fact_climate_impact (
-    country character varying(255),
-    year integer NOT NULL,
+CREATE TABLE co2_project.country_dimension (
     iso_code character varying(30) NOT NULL,
-    population_people bigint,
-    share_of_temperature_change_from_ghg_prct double precision,
-    temperature_change_from_ch4_degrees_c double precision,
-    temperature_change_from_co2_degrees_c double precision,
-    temperature_change_from_ghg_degrees_c double precision,
-    temperature_change_from_n2o_degrees_c double precision
+    country character varying(255),
+    PRIMARY KEY (iso_code)
 );
 
 
 --
--- TOC entry 4944 (class 0 OID 0)
+-- TOC entry 4938 (class 0 OID 0)
 -- Dependencies: 222
--- Name: COLUMN fact_climate_impact.country; Type: COMMENT; Schema: co2_project; Owner: -
+-- Name: COLUMN country_dimension.iso_code; Type: COMMENT; Schema: co2_project; Owner: -
 --
 
-COMMENT ON COLUMN co2_project.fact_climate_impact.country IS 'Country';
+
+COMMENT ON COLUMN co2_project.country_dimension.iso_code IS 'ISO Code';
+
+
+--
+-- TOC entry 4939 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: COLUMN country_dimension.country; Type: COMMENT; Schema: co2_project; Owner: -
+--
+
+
+COMMENT ON COLUMN co2_project.country_dimension.country IS 'Country';
+
+
+CREATE TABLE co2_project.country_year_dimension (
+    iso_code character varying(30) NOT NULL,
+    year integer NOT NULL,
+    population_people bigint,
+    gdp_usd double precision,
+    PRIMARY KEY (iso_code, year),
+    FOREIGN KEY (iso_code) REFERENCES co2_project.country_dimension(iso_code) 
+);
+
+
+--
+-- TOC entry 4940 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: COLUMN country_year_dimension.country_year_dimension; Type: COMMENT; Schema: co2_project; Owner: -
+--
+
+
+COMMENT ON COLUMN co2_project.country_year_dimension.iso_code IS 'ISO Code';
+
+
+--
+-- TOC entry 4941 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: COLUMN country_year_dimension.year; Type: COMMENT; Schema: co2_project; Owner: -
+--
+
+
+COMMENT ON COLUMN co2_project.country_year_dimension.year IS 'Year';
+
+
+--
+-- TOC entry 4942 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: COLUMN country_year_dimension.population_people; Type: COMMENT; Schema: co2_project; Owner: -
+--
+
+
+COMMENT ON COLUMN co2_project.country_year_dimension.population_people IS 'Population';
+
+
+--
+-- TOC entry 4943 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: COLUMN country_year_dimension.gdp_usd; Type: COMMENT; Schema: co2_project; Owner: -
+--
+
+
+COMMENT ON COLUMN co2_project.country_year_dimension.gdp_usd IS 'Gross domestic product (GDP)';
+
+
+CREATE TABLE co2_project.fact_climate_impact (
+    iso_code character varying(30) NOT NULL,
+    year integer NOT NULL,
+    share_of_temperature_change_from_ghg_prct double precision,
+    temperature_change_from_ch4_degrees_c double precision,
+    temperature_change_from_co2_degrees_c double precision,
+    temperature_change_from_ghg_degrees_c double precision,
+    temperature_change_from_n2o_degrees_c double precision,
+    PRIMARY KEY (iso_code, year),
+    FOREIGN KEY (iso_code, year) REFERENCES co2_project.country_year_dimension(iso_code, year)
+);
 
 
 --
@@ -121,27 +189,17 @@ COMMENT ON COLUMN co2_project.fact_climate_impact.temperature_change_from_n2o_de
 --
 
 CREATE TABLE co2_project.fact_consumption (
-    country character varying(255),
-    year integer NOT NULL,
     iso_code character varying(30) NOT NULL,
-    population_people bigint,
-    gdp_usd double precision,
+    year integer NOT NULL,
     consumption_co2_mt double precision,
     consumption_co2_per_capita_t_per_person double precision,
     consumption_co2_per_gdp_kg_per_usd double precision,
     energy_per_capita_kwh double precision,
     energy_per_gdp_kwh double precision,
-    primary_energy_consumption_twh double precision
+    primary_energy_consumption_twh double precision,
+    PRIMARY KEY (iso_code, year),
+    FOREIGN KEY (iso_code, year) REFERENCES co2_project.country_year_dimension(iso_code, year)
 );
-
-
---
--- TOC entry 4952 (class 0 OID 0)
--- Dependencies: 219
--- Name: COLUMN fact_consumption.country; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_consumption.country IS 'Country';
 
 
 --
@@ -160,24 +218,6 @@ COMMENT ON COLUMN co2_project.fact_consumption.year IS 'Year';
 --
 
 COMMENT ON COLUMN co2_project.fact_consumption.iso_code IS 'ISO code';
-
-
---
--- TOC entry 4955 (class 0 OID 0)
--- Dependencies: 219
--- Name: COLUMN fact_consumption.population_people; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_consumption.population_people IS 'Population';
-
-
---
--- TOC entry 4956 (class 0 OID 0)
--- Dependencies: 219
--- Name: COLUMN fact_consumption.gdp_usd; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_consumption.gdp_usd IS 'Gross domestic product (GDP)';
 
 
 --
@@ -240,11 +280,8 @@ COMMENT ON COLUMN co2_project.fact_consumption.primary_energy_consumption_twh IS
 --
 
 CREATE TABLE co2_project.fact_emission_sources (
-    country character varying(255),
-    year integer NOT NULL,
     iso_code character varying(30) NOT NULL,
-    population_people bigint,
-    gdp_usd double precision,
+    year integer NOT NULL,
     cement_co2_mt double precision,
     cement_co2_per_capita_t_per_person double precision,
     coal_co2_mt double precision,
@@ -281,17 +318,10 @@ CREATE TABLE co2_project.fact_emission_sources (
     share_global_oil_co2_prct double precision,
     share_global_other_co2_prct double precision,
     trade_co2_mt double precision,
-    trade_co2_share_prct double precision
+    trade_co2_share_prct double precision,
+    PRIMARY KEY (iso_code, year),
+    FOREIGN KEY (iso_code, year) REFERENCES co2_project.country_year_dimension(iso_code, year)
 );
-
-
---
--- TOC entry 4963 (class 0 OID 0)
--- Dependencies: 220
--- Name: COLUMN fact_emission_sources.country; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_emission_sources.country IS 'Country';
 
 
 --
@@ -310,24 +340,6 @@ COMMENT ON COLUMN co2_project.fact_emission_sources.year IS 'Year';
 --
 
 COMMENT ON COLUMN co2_project.fact_emission_sources.iso_code IS 'ISO code';
-
-
---
--- TOC entry 4966 (class 0 OID 0)
--- Dependencies: 220
--- Name: COLUMN fact_emission_sources.population_people; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_emission_sources.population_people IS 'Population';
-
-
---
--- TOC entry 4967 (class 0 OID 0)
--- Dependencies: 220
--- Name: COLUMN fact_emission_sources.gdp_usd; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_emission_sources.gdp_usd IS 'Gross domestic product (GDP)';
 
 
 --
@@ -669,11 +681,8 @@ COMMENT ON COLUMN co2_project.fact_emission_sources.trade_co2_share_prct IS 'Sha
 --
 
 CREATE TABLE co2_project.fact_emissions (
-    country character varying(255),
-    year integer NOT NULL,
     iso_code character varying(30) NOT NULL,
-    population_people bigint,
-    gdp_usd double precision,
+    year integer NOT NULL,
     co2_mt double precision,
     co2_growth_abs_mt double precision,
     co2_growth_prct_prct double precision,
@@ -691,17 +700,10 @@ CREATE TABLE co2_project.fact_emissions (
     share_global_co2_prct double precision,
     share_global_co2_including_luc_prct double precision,
     share_global_cumulative_co2_prct double precision,
-    share_global_cumulative_co2_including_luc_prct double precision
+    share_global_cumulative_co2_including_luc_prct double precision,
+    PRIMARY KEY (iso_code, year),
+    FOREIGN KEY (iso_code, year) REFERENCES co2_project.country_year_dimension(iso_code, year)
 );
-
-
---
--- TOC entry 5005 (class 0 OID 0)
--- Dependencies: 218
--- Name: COLUMN fact_emissions.country; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_emissions.country IS 'Country';
 
 
 --
@@ -720,24 +722,6 @@ COMMENT ON COLUMN co2_project.fact_emissions.year IS 'Year';
 --
 
 COMMENT ON COLUMN co2_project.fact_emissions.iso_code IS 'ISO code';
-
-
---
--- TOC entry 5008 (class 0 OID 0)
--- Dependencies: 218
--- Name: COLUMN fact_emissions.population_people; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_emissions.population_people IS 'Population';
-
-
---
--- TOC entry 5009 (class 0 OID 0)
--- Dependencies: 218
--- Name: COLUMN fact_emissions.gdp_usd; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_emissions.gdp_usd IS 'Gross domestic product (GDP)';
 
 
 --
@@ -908,11 +892,8 @@ COMMENT ON COLUMN co2_project.fact_emissions.share_global_cumulative_co2_includi
 --
 
 CREATE TABLE co2_project.fact_non_co2_ghg (
-    country character varying(255),
-    year integer NOT NULL,
     iso_code character varying(30) NOT NULL,
-    population_people bigint,
-    gdp_usd double precision,
+    year integer NOT NULL,
     ghg_excluding_lucf_per_capita_t_per_person double precision,
     ghg_per_capita_t_per_person double precision,
     methane_mt double precision,
@@ -920,17 +901,10 @@ CREATE TABLE co2_project.fact_non_co2_ghg (
     nitrous_oxide_mt double precision,
     nitrous_oxide_per_capita_t_per_person double precision,
     total_ghg_mt double precision,
-    total_ghg_excluding_lucf_mt double precision
+    total_ghg_excluding_lucf_mt double precision,
+    PRIMARY KEY (iso_code, year),
+    FOREIGN KEY (iso_code, year) REFERENCES co2_project.country_year_dimension(iso_code, year)
 );
-
-
---
--- TOC entry 5028 (class 0 OID 0)
--- Dependencies: 221
--- Name: COLUMN fact_non_co2_ghg.country; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_non_co2_ghg.country IS 'Country';
 
 
 --
@@ -949,24 +923,6 @@ COMMENT ON COLUMN co2_project.fact_non_co2_ghg.year IS 'Year';
 --
 
 COMMENT ON COLUMN co2_project.fact_non_co2_ghg.iso_code IS 'ISO code';
-
-
---
--- TOC entry 5031 (class 0 OID 0)
--- Dependencies: 221
--- Name: COLUMN fact_non_co2_ghg.population_people; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_non_co2_ghg.population_people IS 'Population';
-
-
---
--- TOC entry 5032 (class 0 OID 0)
--- Dependencies: 221
--- Name: COLUMN fact_non_co2_ghg.gdp_usd; Type: COMMENT; Schema: co2_project; Owner: -
---
-
-COMMENT ON COLUMN co2_project.fact_non_co2_ghg.gdp_usd IS 'Gross domestic product (GDP)';
 
 
 --
@@ -1039,101 +995,4 @@ COMMENT ON COLUMN co2_project.fact_non_co2_ghg.total_ghg_mt IS 'Annual greenhous
 --
 
 COMMENT ON COLUMN co2_project.fact_non_co2_ghg.total_ghg_excluding_lucf_mt IS '	Annual greenhouse gas emissions from fossil fuels and industry (measured in tonnes of carbon dioxide-equivalents over a 100-year timescale)';
-
-
---
--- TOC entry 4692 (class 2606 OID 246127)
--- Name: agg_climate_impact agg_climate_impact_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.agg_climate_impact
-    ADD CONSTRAINT agg_climate_impact_pkey PRIMARY KEY (year, country);
-
-
---
--- TOC entry 4690 (class 2606 OID 246122)
--- Name: agg_consumption agg_consumption_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.agg_consumption
-    ADD CONSTRAINT agg_consumption_pkey PRIMARY KEY (year, country);
-
-
---
--- TOC entry 4696 (class 2606 OID 246137)
--- Name: agg_emission_sources agg_emission_sources_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.agg_emission_sources
-    ADD CONSTRAINT agg_emission_sources_pkey PRIMARY KEY (year, country);
-
-
---
--- TOC entry 4688 (class 2606 OID 246117)
--- Name: agg_emissions agg_emissions_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.agg_emissions
-    ADD CONSTRAINT agg_emissions_pkey PRIMARY KEY (year, country);
-
-
---
--- TOC entry 4694 (class 2606 OID 246132)
--- Name: agg_non_co2_ghg agg_non_co2_ghg_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.agg_non_co2_ghg
-    ADD CONSTRAINT agg_non_co2_ghg_pkey PRIMARY KEY (year, country);
-
-
---
--- TOC entry 4686 (class 2606 OID 246097)
--- Name: fact_climate_impact fact_climate_impact_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.fact_climate_impact
-    ADD CONSTRAINT fact_climate_impact_pkey PRIMARY KEY (year, iso_code);
-
-
---
--- TOC entry 4680 (class 2606 OID 246082)
--- Name: fact_consumption fact_consumption_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.fact_consumption
-    ADD CONSTRAINT fact_consumption_pkey PRIMARY KEY (year, iso_code);
-
-
---
--- TOC entry 4682 (class 2606 OID 246087)
--- Name: fact_emission_sources fact_emission_sources_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.fact_emission_sources
-    ADD CONSTRAINT fact_emission_sources_pkey PRIMARY KEY (year, iso_code);
-
-
---
--- TOC entry 4678 (class 2606 OID 246074)
--- Name: fact_emissions fact_emissions_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.fact_emissions
-    ADD CONSTRAINT fact_emissions_pkey PRIMARY KEY (year, iso_code);
-
-
---
--- TOC entry 4684 (class 2606 OID 246092)
--- Name: fact_non_co2_ghg fact_non_co2_ghg_pkey; Type: CONSTRAINT; Schema: co2_project; Owner: -
---
-
-ALTER TABLE ONLY co2_project.fact_non_co2_ghg
-    ADD CONSTRAINT fact_non_co2_ghg_pkey PRIMARY KEY (year, iso_code);
-
-
--- Completed on 2026-03-26 11:03:53
-
---
--- PostgreSQL database dump complete
---
 
