@@ -1,0 +1,14 @@
+[project]
+name = "lab02-4360987"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "fastparquet>=2026.3.0",
+    "great-expectations>=1.16.0",
+    "pandas>=3.0.2",
+    "psycopg2-binary>=2.9.11",
+    "sqlalchemy>=2.0.49",
+]
