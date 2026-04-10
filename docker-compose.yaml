@@ -1,0 +1,66 @@
+services:
+  app:
+    image: pipeline_elt
+    build: .
+    container_name: pipeline_ELT
+    command: uv run main.py
+    volumes:
+      - raw_parquet:/app/data/raw
+      - ./gx_docs:/app/gx
+    depends_on:
+      - postgres-db
+    networks:
+      - private_network
+
+  postgres-db:
+    image: postgres
+    container_name: postgres_db 
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - data_sql:/var/lib/postgresql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - private_network
+      - front_network
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    restart: always
+    environment:
+      MB_DB_FILE: /metabase-data/metabase
+    volumes:
+      - ./frontend/metabase_data:/metabase-data
+    ports:
+      - "3000:3000"
+    networks:
+      - front_network
+
+  web-service:
+    image: nginx
+    container_name: static_web
+    volumes:
+      - ./gx_docs/gx/uncommitted/data_docs/local_site:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+
+volumes:
+  raw_parquet:
+    name: "raw_parquet"
+    labels:
+      description: "Volume to handle just extracted data"
+
+  data_sql:
+    name: "data_sql"
+    labels:
+      description: "Postgresql persistent data storage"
+
+networks:
+  private_network:
+    driver: bridge
+  front_network:
+    driver: bridge
