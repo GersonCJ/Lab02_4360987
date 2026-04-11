@@ -48,6 +48,20 @@ services:
     ports:
       - "8080:80"
 
+  elt-transformation:
+    image: ghcr.io/dbt-labs/dbt-postgres:1.9.latest
+    container_name: dbt
+    working_dir: /usr/app/dbt_project
+    entrypoint: /bin/sh -c "sleep infinity"
+    env_file: .env
+    volumes:
+      - ./elt_dbt:/usr/app/dbt_project
+      - ./profiles:/root/.dbt
+    depends_on:
+      - postgres-db
+    networks:
+      - private_network
+    
 volumes:
   raw_parquet:
     name: "raw_parquet"
