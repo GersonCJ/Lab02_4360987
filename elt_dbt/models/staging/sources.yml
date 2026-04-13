@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: staging_raw_sources  # Nome de referência interna no dbt
+    database: PECE_LAB02       # O nome da sua database no Postgres
+    schema: staging_raw        # O Schema onde o Python "cospe" o dado
+    loaded_at_field: _ingested_at
+    #freshness:
+    #  warn_after: {count: 24, period: hour}
+    #  error_after: {count: 48, period: hour}
+    description: "Camada Bronze contendo dados brutos injetados via Python"
+
+    tables:
+      - name: raw_full
+        description: "Tabela completa de emissões de CO2 carregada do arquivo Parquet"
+        columns:
+          - name: iso_code
+            description: "Código ISO do país"
+            tests: 
+              - unique
+              - not null
+          - name: year
+            description: "Ano da coleta do dado"
+            tests:
+              - not null

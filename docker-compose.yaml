@@ -5,7 +5,7 @@ services:
     container_name: pipeline_ELT
     command: uv run main.py
     volumes:
-      - raw_parquet:/app/data/raw
+      - raw_parquet_lab2:/app/data/raw
       - ./gx_docs:/app/gx
     depends_on:
       - postgres-db
@@ -63,8 +63,8 @@ services:
       - private_network
     
 volumes:
-  raw_parquet:
-    name: "raw_parquet"
+  raw_parquet_lab2:
+    name: "raw_parquet_lab2"
     labels:
       description: "Volume to handle just extracted data"
 
