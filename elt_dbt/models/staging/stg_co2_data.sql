@@ -4,6 +4,11 @@ with source_data AS (
 
 renamed AS (
     SELECT
+        -- Logic for KOSOVO that does not come with ISO code.
+        CASE
+            WHEN country = 'Kosovo' AND iso_code IS NULL THEN 'XKS'
+            ELSE iso_code
+        END AS
         iso_code,
         year,
         country,
