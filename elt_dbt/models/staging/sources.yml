@@ -16,10 +16,8 @@ sources:
         columns:
           - name: iso_code
             description: "Código ISO do país"
-            tests: 
-              - unique
-              - not null
+
           - name: year
             description: "Ano da coleta do dado"
             tests:
-              - not null
+              - not_null

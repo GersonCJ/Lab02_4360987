@@ -1,0 +1,6 @@
+models:
+  - name: int_co2_national
+    columns:
+      - name: iso_code
+        tests:
+          - not_null
