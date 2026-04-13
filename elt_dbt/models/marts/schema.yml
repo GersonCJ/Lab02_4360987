@@ -1,0 +1,40 @@
+models:
+
+  - name: fact_co2_national
+    columns:
+      - name: iso_code
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_iso_country_year')
+              field: iso_code
+
+      - name: year
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_iso_country_year')
+              field: year
+
+  - name: dim_iso_country_year
+    columns:
+      - name: iso_code
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_iso_country')
+              field: iso_code
+
+      - name: year
+        tests:
+          - not_null
+
+  - name: dim_iso_country
+    columns:
+      - name: iso_code
+        tests:
+          - not_null
+          - unique
+
+
+        
