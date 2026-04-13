@@ -20,8 +20,8 @@ def run_validation():
     )
 
     # Data Asset's parameters
-    asset_name = "co2_raw_data_csv"
-    file_csv_asset = data_source.add_csv_asset(name=asset_name)
+    asset_name = "co2_raw_data_parquet"
+    file_csv_asset = data_source.add_parquet_asset(name=asset_name)
 
     # Batch definition
     file_data_asset = context.data_sources.get(data_source_name).get_asset(asset_name)
@@ -34,7 +34,7 @@ def run_validation():
     expectation_suite = context.suites.add(expectation_suite)
 
     # Load data for configuration
-    df_to_validate = pd.read_csv(source_folder / batch_definition_name)
+    df_to_validate = pd.read_parquet(source_folder / batch_definition_name)
 
     # Define table level expectations
     columns = list(df_to_validate.columns)
