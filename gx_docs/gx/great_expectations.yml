@@ -83,15 +83,15 @@ data_docs_sites:
 fluent_datasources:
   my_filesystem_data_source:
     type: pandas_filesystem
-    id: 50108a45-7819-41da-9064-6e33cccf61da
+    id: ed7fdbff-7049-4488-85b7-6fa86678c0b0
     assets:
       co2_raw_data_parquet:
         type: parquet
-        id: 78ecbd72-7c9c-47ef-9007-7b3531ff388a
+        id: 4492a6c7-eeae-400e-8b57-4cd05136c862
         batch_definitions:
           owid_co2_raw_data.parquet:
-            id: f08ed1fe-dce1-4061-8cae-1490fa5b81e1
+            id: 0e58d7a4-19f3-4bdd-842b-5c9ddabfd4bc
             partitioner:
     base_directory: /app/data/raw
 analytics_enabled:
-data_context_id: 425d3723-dcf4-4708-9d70-f559b5cfce37
+data_context_id: cf841099-8958-4ae8-bf0f-1074a47281d5

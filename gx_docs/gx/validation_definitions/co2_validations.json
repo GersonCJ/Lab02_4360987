@@ -1,22 +1,22 @@
 {
   "data": {
     "asset": {
-      "id": "78ecbd72-7c9c-47ef-9007-7b3531ff388a",
+      "id": "4492a6c7-eeae-400e-8b57-4cd05136c862",
       "name": "co2_raw_data_parquet"
     },
     "batch_definition": {
-      "id": "f08ed1fe-dce1-4061-8cae-1490fa5b81e1",
+      "id": "0e58d7a4-19f3-4bdd-842b-5c9ddabfd4bc",
       "name": "owid_co2_raw_data.parquet"
     },
     "datasource": {
-      "id": "50108a45-7819-41da-9064-6e33cccf61da",
+      "id": "ed7fdbff-7049-4488-85b7-6fa86678c0b0",
       "name": "my_filesystem_data_source"
     }
   },
-  "id": "804acf3d-ec2d-4f56-9eff-f38a96dce907",
+  "id": "2b4b4d83-ac0b-465d-b536-da8cab567c72",
   "name": "co2_validations",
   "suite": {
-    "id": "2cc28577-9e29-4b1e-8ac2-71c3a89c31d2",
+    "id": "b538aae8-80b0-4dbc-8dc7-9286c9e5c109",
     "name": "co2_quality_test"
   }
 }

@@ -18,7 +18,7 @@ def run_validation():
     data_source = context.data_sources.add_pandas_filesystem(
         name=data_source_name, base_directory=source_folder
     )
-
+        
     # Data Asset's parameters
     asset_name = "co2_raw_data_parquet"
     file_csv_asset = data_source.add_parquet_asset(name=asset_name)
