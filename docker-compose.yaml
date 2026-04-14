@@ -41,10 +41,10 @@ services:
       - front_network
 
   web-service:
-    image: nginx
-    container_name: static_web
+    image: nginx:alpine
+    container_name: static_gx
     volumes:
-      - ./gx_docs/gx/uncommitted/data_docs/local_site:/usr/share/nginx/html
+      - ./gx_docs/gx/uncommitted/data_docs/local_site:/usr/share/nginx/html:ro
     ports:
       - "8080:80"
 
@@ -61,6 +61,14 @@ services:
       - postgres-db
     networks:
       - private_network
+
+  dbt-docs:
+    image: nginx:alpine
+    container_name: static_dbt
+    volumes:
+      - ./elt_dbt/target:/usr/share/nginx/html:ro
+    ports:
+      - "8181:80"
     
 volumes:
   raw_parquet_lab2:

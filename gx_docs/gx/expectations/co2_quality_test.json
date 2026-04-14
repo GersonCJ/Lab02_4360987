@@ -1,0 +1,104 @@
+{
+  "expectations": [
+    {
+      "id": "a7e4de83-30cd-4d01-a43b-6b44b30b4a5e",
+      "kwargs": {
+        "column": "country",
+        "type_": "string"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_of_type"
+    },
+    {
+      "id": "d4f35f55-bdb0-4ea1-ada0-3fe3f4d72f68",
+      "kwargs": {
+        "column": "iso_code",
+        "type_": "string"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_of_type"
+    },
+    {
+      "id": "b73fd171-900d-4440-aa60-10ffeffe8b6f",
+      "kwargs": {
+        "column": "country"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "d89c64d4-0574-401e-aabf-8b8c31e9b9d2",
+      "kwargs": {
+        "column": "year"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "7cac3040-6e3d-4c28-a921-73eed19d0045",
+      "kwargs": {
+        "column": "iso_code"
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "1ff4ba1e-77c2-4714-b53d-c6fde0797efc",
+      "kwargs": {
+        "column": "co2_growth_prct",
+        "value_set": [
+          0,
+          1
+        ]
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    },
+    {
+      "id": "bace8c9e-5b2c-4fda-843b-a3c1ebbad11d",
+      "kwargs": {
+        "column": "co2_including_luc_growth_prct",
+        "value_set": [
+          0,
+          1
+        ]
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_values_to_be_in_set"
+    },
+    {
+      "id": "828b5525-bb46-426d-8fca-8c061404940a",
+      "kwargs": {
+        "column": "population",
+        "min_value": 0.0
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_min_to_be_between"
+    },
+    {
+      "id": "5b607189-a86a-403c-b581-cd9dab4a909d",
+      "kwargs": {
+        "column": "iso_code",
+        "max_value": 249,
+        "min_value": 193
+      },
+      "meta": {},
+      "severity": "critical",
+      "type": "expect_column_unique_value_count_to_be_between"
+    }
+  ],
+  "id": "2cc28577-9e29-4b1e-8ac2-71c3a89c31d2",
+  "meta": {
+    "great_expectations_version": "1.16.0"
+  },
+  "name": "co2_quality_test",
+  "notes": null
+}

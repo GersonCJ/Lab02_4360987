@@ -19,6 +19,8 @@ def main():
     url_metadata = path_strings.metadata_url
     bronze_path = Path(path_strings.bronze_path)
     mounted_gx_location = path_strings.gx_location
+    # Caminho para o index gerado pelo GX dentro do volume montado
+    gx_index_file = mounted_gx_location / "uncommitted" / "data_docs" / "local_site" / "index.html"
     raw_main_path = Path(path_strings.raw_main_path)
 
     # ------------------ Extraction using commit a499dd34c1372468f2335a370c5dd13cc3a72d90
@@ -30,7 +32,7 @@ def main():
         print("Data already available. Skipping extraction ...")
 
     # Validation Layer on raw data
-    if not any(mounted_gx_location.iterdir()):
+    if not gx_index_file.exists():
         gx.run_validation()
     else:
         print("Validation already performed. Verify the results html results.")

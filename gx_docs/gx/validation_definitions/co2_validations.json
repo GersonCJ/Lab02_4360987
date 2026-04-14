@@ -1,0 +1,22 @@
+{
+  "data": {
+    "asset": {
+      "id": "78ecbd72-7c9c-47ef-9007-7b3531ff388a",
+      "name": "co2_raw_data_parquet"
+    },
+    "batch_definition": {
+      "id": "f08ed1fe-dce1-4061-8cae-1490fa5b81e1",
+      "name": "owid_co2_raw_data.parquet"
+    },
+    "datasource": {
+      "id": "50108a45-7819-41da-9064-6e33cccf61da",
+      "name": "my_filesystem_data_source"
+    }
+  },
+  "id": "804acf3d-ec2d-4f56-9eff-f38a96dce907",
+  "name": "co2_validations",
+  "suite": {
+    "id": "2cc28577-9e29-4b1e-8ac2-71c3a89c31d2",
+    "name": "co2_quality_test"
+  }
+}
