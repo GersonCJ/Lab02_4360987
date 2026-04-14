@@ -26,7 +26,7 @@ def run_validation():
     # Batch definition
     file_data_asset = context.data_sources.get(data_source_name).get_asset(asset_name)
 
-    batch_definition_name = "owid_co2_raw_data.csv"
+    batch_definition_name = "owid_co2_raw_data.parquet"
     batch_definition = file_csv_asset.add_batch_definition(name=batch_definition_name)
 
     # Configure expectation suite to be called over runtime data
