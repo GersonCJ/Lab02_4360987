@@ -6,12 +6,32 @@ from sqlalchemy import create_engine
 import os
 import src.extraction as ext
 import src.load as ld
+import shutil
 # import src.transformation as trf
 import urllib.parse
 
 load_dotenv()
 
+
+def clean_gx_metadata():
+    """Remove pastas de metadados do GX para garantir um fresh start."""
+    # O caminho deve ser o mesmo que o GX usa no seu Docker (/app/gx)
+    gx_folder = Path("/app/gx")
+    
+    if gx_folder.exists() and gx_folder.is_dir():
+        print(f"Cleaning GX metadata at {gx_folder}...")
+        try:
+            # Remove a pasta e tudo dentro dela
+            shutil.rmtree(gx_folder)
+            # Recria a pasta vazia para o GX não reclamar que o diretório sumiu
+            gx_folder.mkdir(parents=True, exist_ok=True)
+            print("GX metadata cleaned successfully.")
+        except Exception as e:
+            print(f"Warning: Could not clean GX folder: {e}")
+
 def main():
+
+    clean_gx_metadata()
 
     # Path and requirements
 
@@ -30,12 +50,11 @@ def main():
         ext.extract(url, url_metadata)
     else:
         print("Data already available. Skipping extraction ...")
-
+    
     # Validation Layer on raw data
-    if not gx_index_file.exists():
-        gx.run_validation()
-    else:
-        print("Validation already performed. Verify the results html results.")
+
+    gx.run_validation()
+
 
     # ------------------- Load to Postgres (Before transformation)
 
